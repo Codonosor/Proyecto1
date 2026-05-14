@@ -25,7 +25,8 @@ class Inventario:
         """
         if cantidad < 0:
             raise ValueError("cantidad debe ser mayor o igual a 0")
-        self._productos[producto.codigo] = (producto, int(cantidad))
+        # Use el nuevo método mostrar_codigo para obtener el código
+        self._productos[producto.mostrar_codigo()] = (producto, int(cantidad))
 
     def eliminar_producto(self, codigo):
         """Elimina un producto por su código. Devuelve True si se eliminó."""
@@ -36,6 +37,7 @@ class Inventario:
 
     def obtener_producto(self, codigo):
         """Devuelve la instancia de producto si existe, o None."""
+        # Devuelve la instancia de producto si existe
         item = self._productos.get(codigo)
         return item[0] if item else None
 
@@ -67,5 +69,6 @@ class Inventario:
         """Devuelve una lista de tuplas (codigo, nombre, precio, stock)."""
         salida = []
         for p, q in self._productos.values():
-            salida.append((p.codigo, p.nombre, p.precio, q))
+            # Usar los métodos descriptivos para exponer los atributos
+            salida.append((p.mostrar_codigo(), p.mostrar_nombre(), p.mostrar_precio(), q))
         return salida

@@ -84,7 +84,8 @@ def interfaz_terminal():
                         cantidad = 1
 
                     # Si la cantidad solicitada excede el stock, solicitar confirmación
-                    stock_actual = inv.stock_de(producto.codigo)
+                    # Consultar stock usando el código del producto
+                    stock_actual = inv.stock_de(producto.mostrar_codigo())
                     if cantidad > stock_actual:
                         print(f"Solicitaste {cantidad} pero el stock es {stock_actual}.")
                         if stock_actual <= 0:
@@ -97,7 +98,8 @@ def interfaz_terminal():
                         cantidad = stock_actual
 
                     # Reservar inmediatamente la cantidad en inventario para evitar overbooking
-                    reservado = inv.reservar(producto.codigo, cantidad)
+                    # Reservar usando el código del producto
+                    reservado = inv.reservar(producto.mostrar_codigo(), cantidad)
                     if not reservado:
                         print("No fue posible reservar en inventario. No se añadió el producto.")
                         continue
@@ -108,7 +110,8 @@ def interfaz_terminal():
                     print("No se puede crear un pedido vacío. Volviendo al menú principal.")
                     # Aunque no debería haber reservas en un pedido vacío, nos aseguramos
                     for it in pedido.items():
-                        inv.liberar(it.producto.codigo, it.cantidad)
+                        # Liberar usando código del producto
+                        inv.liberar(it.producto.mostrar_codigo(), it.cantidad)
                     continue
 
                 # Preguntar si se finaliza ahora o se guarda como pendiente (pendiente ya tiene stock reservado)
@@ -171,7 +174,8 @@ def interfaz_terminal():
                 else:
                     # Cancelar: liberar el stock reservado por las líneas del pedido
                     for it in ped.items():
-                        inv.liberar(it.producto.codigo, it.cantidad)
+                        # Liberar usando método descriptivo
+                        inv.liberar(it.producto.mostrar_codigo(), it.cantidad)
                     print(f"Pedido de {ped.cliente} cancelado y stock liberado.")
                     pedidos_pendientes = pedidos_pendientes[: sel - 1] + pedidos_pendientes[sel:]
 

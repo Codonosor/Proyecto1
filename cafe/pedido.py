@@ -1,8 +1,7 @@
 """Módulo de pedidos.
 
 Define estructuras sencillas para representar items de pedido y pedidos
-(local y delivery). Incluye cálculo de subtotal y total con soporte para
-descuentos.
+(local y delivery). Incluye cálculo de total con soporte para descuentos.
 """
 
 
@@ -39,52 +38,70 @@ class Pedido:
         # Devuelve una copia de las líneas del pedido
         return list(self._items)
 
-    def subtotal(self):
-        # Calcula la suma de las líneas
-        total = 0.0
-        for it in self._items:
-            total += it.total_linea()
-        return total
+    def aplicar_descuento_operador(self, monto):
+        """Aplica el descuento ingresado por el operador al monto dado.
 
-    def total(self):
-        # Calcula total aplicando descuento.
-        # Prioriza _descuento_percent si está establecido (>0).
-        sub = self.subtotal()
-        # Si se indicó descuento en porcentaje (ej. 25 -> 25%), aplicarlo primero
+        Soporta el descuento en porcentaje (_descuento_percent) y mantiene
+        compatibilidad con el campo legacy _descuento (fracción o monto fijo).
+        Devuelve el monto resultante.
+        """
+        # Priorizar descuento en porcentaje (ej. 25 -> 25%) si está presente
         if 0 < getattr(self, "_descuento_percent", 0):
             pct = float(self._descuento_percent)
-            return sub * (1 - pct / 100.0)
-        # Compatibilidad hacia atrás: si _descuento está en (0,1) se interpreta como fracción
-        d = self._descuento
-        if 0 < d < 1:
-            return sub * (1 - d)
-        # si _descuento >= 1 se interpreta como monto fijo
-        return max(0.0, sub - d)
+            return monto * (1 - pct / 100.0)
 
+        # Compatibilidad backward: _descuento puede ser fracción (0<d<1) o monto fijo (d>=1)
+        d = getattr(self, "_descuento", 0.0)
+        if 0 < d < 1:
+            return monto * (1 - d)
+        return max(0.0, monto - d)
+
+    def total(self):
+        """Cálculo genérico del total de un pedido.
+
+        Calcula la suma de las líneas y aplica el descuento del operador.
+        Las subclases pueden sobrescribir este método para aplicar reglas
+        adicionales.
+        """
+        # calcular suma de líneas directamente (evita método subtotal)
+        suma = 0.0
+        for it in self._items:
+            suma += it.total_linea()
+        return self.aplicar_descuento_operador(suma)
 
 class PedidoLocal(Pedido):
-    """Pedido para consumo en local. Actualmente no añade comportamiento extra."""
+    """Pedido para consumo en local.
+
+    Aplica un descuento fijo del 10% (regla de tienda) y además respeta el
+    descuento ingresado por el operador. Uso de polimorfismo: redefine total().
+    """
+    def total(self):
+        # calcular suma de líneas, aplicar 10% de tienda y luego descuento del operador
+        suma = 0.0
+        for it in self._items:
+            suma += it.total_linea()
+        sub_after_local = suma * (1 - 10.0 / 100.0)
+        return self.aplicar_descuento_operador(sub_after_local)
 
 
 class PedidoDelivery(Pedido):
-    """Pedido para delivery que añade un cargo por envío."""
+    """Pedido para delivery que añade un cargo por envío.
+
+    Aplica un descuento fijo del 5% (regla de tienda para delivery), además
+    del descuento ingresado por el operador. Añade el cargo por envío al final.
+    """
 
     def __init__(self, id_pedido, cliente, descuento=0.0, cargo_envio=5.0):
         super().__init__(id_pedido, cliente, mesa=0)
+        # valor legacy
         self._descuento = descuento
         self._descuento_percent = 0.0
         self._cargo_envio = float(cargo_envio)
 
     def total(self):
-        # Aplica descuento (se prioriza _descuento_percent) y suma el cargo por envío
-        sub = self.subtotal()
-        if 0 < getattr(self, "_descuento_percent", 0):
-            pct = float(self._descuento_percent)
-            sub = sub * (1 - pct / 100.0)
-        else:
-            d = self._descuento
-            if 0 < d < 1:
-                sub = sub * (1 - d)
-            else:
-                sub = max(0.0, sub - d)
-        return sub + self._cargo_envio
+        # calcular suma de líneas, aplicar 5% de tienda, luego descuento del operador y cargo
+        suma = 0.0
+        for it in self._items:
+            suma += it.total_linea()
+        sub_after_delivery = suma * (1 - 5.0 / 100.0)
+        return self.aplicar_descuento_operador(sub_after_delivery) + self._cargo_envio

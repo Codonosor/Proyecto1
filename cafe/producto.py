@@ -20,18 +20,15 @@ class Producto:
         self._nombre = nombre
         self._precio = float(precio)
 
-    @property
-    def codigo(self):
+    def mostrar_codigo(self):
         # Código identificador del producto (ej. "D001")
         return self._codigo
 
-    @property
-    def nombre(self):
+    def mostrar_nombre(self):
         # Nombre legible del producto
         return self._nombre
 
-    @property
-    def precio(self):
+    def mostrar_precio(self):
         # Precio base almacenado
         return self._precio
 
@@ -55,8 +52,7 @@ class Alimento(Producto):
         super().__init__(codigo, nombre, precio)
         self._calorias = int(calorias)
 
-    @property
-    def calorias(self):
+    def mostrar_calorias(self):
         # Calorías aproximadas del alimento
         return self._calorias
 
@@ -76,8 +72,7 @@ class Bebida(Producto):
         super().__init__(codigo, nombre, precio)
         self._tam_ml = int(tam_ml)
 
-    @property
-    def tam_ml(self):
+    def mostrar_tam_ml(self):
         # Volumen de la bebida en mililitros
         return self._tam_ml
 
