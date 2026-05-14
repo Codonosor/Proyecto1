@@ -1,43 +1,26 @@
+# Sistema de gestión para cafetería
 
-# Sistema de gestión para cafetería (versión simplificada)
+Proyecto Python orientado a objetos para gestionar productos, pedidos e
+inventario en una cafetería. Está pensado para uso desde la terminal y con
+una API interna sencilla.
 
-Esta versión del proyecto está diseñada para ser compacta, legible y libre
-de dependencias externas. A continuación se describen las decisiones y
-el uso actual.
+Características principales.
+- IDs de pedidos correlativos: Local -> L01, L02..., Delivery -> D001, D002...
+- Reserva de stock inmediata al añadir productos a un pedido.
+- Descuentos: el operador puede aplicar descuentos en porcentaje al cobrar;
+  además, hay descuentos automáticos por tipo de pedido (10% local, 5% delivery).
+- Atributos sensibles protegidos: campos críticos (por ejemplo, precio en Producto
+  y líneas de pedido en Pedido) son privados y se modifican mediante métodos públicos.
 
-Decisiones principales
-- Nombres en español para módulos y clases.
-- Sin dependencias: no se usan typing, abc, __future__, uuid ni threading.
-- IDs de pedidos correlativos y legibles: Local -> L01, L02..., Delivery -> D001, D002...
-- Inventario con reserva inmediata: al añadir un item al pedido se reduce el stock.
-
-Estructura del proyecto (módulos dentro de la carpeta cafe)
-- producto.py: Producto, Alimento, Bebida
-- inventario.py: Inventario (agregar, eliminar, reservar, liberar, listar)
-- pedido.py: Pedido, PedidoLocal, PedidoDelivery, ItemPedido
-- gestor.py: GestorCafe (genera IDs correlativos y procesa pedidos)
-- main.py: Interfaz de terminal con menú (Nuevo pedido / Finalizar pedido / Modificar inventario)
-- run_tests.py: Script de pruebas para validar reservas y liberaciones
+Estructura del proyecto
+- cafe/producto.py: Producto, Alimento, Bebida
+- cafe/inventario.py: Inventario (agregar, eliminar, obtener, reservar, liberar, listar)
+- cafe/pedido.py: Pedido, PedidoLocal, PedidoDelivery, ItemPedido (cálculo de totales y descuentos)
+- cafe/gestor.py: GestorCafe (genera IDs correlativos y procesa pedidos)
+- main.py: Interfaz de terminal con menú interactivo
 
 Uso rápido
 
-1. Ejecuta: `python main.py` en una terminal.
-2. El menú permite:
-   - Nuevo pedido: crear pedido (mesa 0 = delivery), añadir productos (reserva inmediata),
-     y elegir si finalizar ahora o guardar como pendiente.
-   - Finalizar pedido pendiente: listar pendientes, y elegir Finalizar (cobrar) o Cancelar (liberar stock).
-   - Modificar inventario: añadir/actualizar productos o eliminar por código.
-   - Salir: cerrar la aplicación.
-
-3. Los pedidos pendientes conservan la reserva de stock hasta que se finalicen o cancelen.
-
-Probar que todo funciona
-
-Ejecuta `python run_tests.py` para ejecutar las pruebas incluidas que verifican
-reservas, liberaciones y límites de stock.
-
-Notas
-
-- Esta versión fue simplificada para mayor claridad. Si quieres volver a una
-  versión con procesamiento en paralelo (workers) o agregar persistencia en
-  JSON/BD, puedo implementarlo.
+1. Ejecuta: `python main.py` en la raíz del proyecto.
+2. El menú interactivo permite crear pedidos, finalizar o cancelar pedidos
+   pendientes, y modificar el inventario.

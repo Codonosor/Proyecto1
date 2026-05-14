@@ -1,24 +1,23 @@
-"""Módulo de productos.
-
-Contiene clases simples que representan productos de la cafetería. Está
-intencionadamente ligero y con métodos claros para que sean fáciles de
-entender y extender.
+"""
+Módulo de productos.
+Define la clase Producto y sus subclases Alimento y Bebida, 
+con atributos y métodos relevantes para su uso en el sistema de pedidos.
 """
 
 
 class Producto:
-    """Producto base para la cafetería.
-
-    Atributos protegidos (_codigo, _nombre, _precio). Proporciona propiedades
-    de solo lectura y un método obtener_precio que puede ser sobrescrito por
-    subclases si el cálculo del precio cambia.
+    """
+    Producto base para la cafetería.
+    Proporciona propiedades de solo lectura y un método obtener_precio 
+    que puede ser sobrescrito por las subclases si el cálculo del precio cambia.
     """
 
     def __init__(self, codigo, nombre, precio):
         # Inicializa los datos básicos del producto
         self._codigo = codigo
         self._nombre = nombre
-        self._precio = float(precio)
+        # precio marcado como privado (name mangling) para evitar modificaciones directas
+        self.__precio = float(precio)
 
     def mostrar_codigo(self):
         # Código identificador del producto (ej. "D001")
@@ -30,19 +29,23 @@ class Producto:
 
     def mostrar_precio(self):
         # Precio base almacenado
-        return self._precio
+        return self.__precio
+
+    def set_precio(self, nuevo_precio):
+        """Permite actualizar el precio de forma controlada."""
+        self.__precio = float(nuevo_precio)
 
     def obtener_precio(self):
-        """Devuelve el precio del producto.
-
-        Este método es el punto de extensión para polimorfismo: subclases pueden
-        sobrescribirlo para aplicar reglas de precio específicas.
         """
-        return self._precio
+        Devuelve el precio del producto.
+        Las subclases pueden sobrescribirlo para aplicar reglas de precio específicas.
+        """
+        return self.__precio
 
 
 class Alimento(Producto):
-    """Producto del tipo alimento.
+    """
+    Producto del tipo alimento.
 
     Añade atributo de calorías y mantiene el comportamiento por defecto de
     precio.
@@ -58,12 +61,12 @@ class Alimento(Producto):
 
     def obtener_precio(self):
         # Por ahora, no hay recálculo; devolvemos el precio base
-        return self._precio
+        return super().obtener_precio()
 
 
 class Bebida(Producto):
-    """Producto del tipo bebida.
-
+    """
+    Producto del tipo bebida.
     Añade atributo de tamaño en ml y mantiene el comportamiento por defecto de
     precio.
     """
@@ -73,9 +76,9 @@ class Bebida(Producto):
         self._tam_ml = int(tam_ml)
 
     def mostrar_tam_ml(self):
-        # Volumen de la bebida en mililitros
+        # Tamaño de la bebida en mililitros
         return self._tam_ml
 
     def obtener_precio(self):
-        # Por ahora, no hay recálculo; devolvemos el precio base
-        return self._precio
+        # Devolvemos el precio base
+        return super().obtener_precio()

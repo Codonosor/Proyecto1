@@ -1,16 +1,16 @@
-"""Módulo de inventario.
-
-Contiene una implementación pequeña y clara de inventario que mantiene un
-mapa interno de productos y sus cantidades. Proporciona operaciónes para
-agregar, eliminar, reservar y liberar stock.
+"""
+Módulo de inventario.
+Define la clase Inventario, que mantiene un mapa de productos y sus cantidades disponibles. 
+Proporciona métodos para agregar, eliminar, consultar stock y reservar/liberar unidades. 
+También incluye un método para listar los productos con su información relevante.
 """
 
 
 class Inventario:
-    """Gestor simple de inventario.
-
+    """
+    Gestor de inventario.
     La estructura interna es un diccionario privado que mapea el código del
-    producto a una tupla (producto, stock). Se exponen métodos para operar
+    producto a una tupla (producto, stock). Tiene métodos para operar
     sobre esa estructura sin revelar su implementación.
     """
 
@@ -20,7 +20,6 @@ class Inventario:
 
     def agregar_producto(self, producto, cantidad=0):
         """Agrega o actualiza un producto con la cantidad dada.
-
         Lanza ValueError si la cantidad es negativa.
         """
         if cantidad < 0:
@@ -58,7 +57,7 @@ class Inventario:
         return True
 
     def liberar(self, codigo, cantidad=1):
-        """Libera unidades devueltas al stock. Devuelve True si OK."""
+        """Libera unidades devueltas al stock. Devuelve True si la operación fue exitosa."""
         if codigo not in self._productos:
             return False
         producto, stock = self._productos[codigo]

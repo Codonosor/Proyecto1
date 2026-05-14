@@ -1,20 +1,16 @@
-"""Interfaz de terminal para crear y procesar pedidos en la cafetería.
-
-Esta interfaz guía al operador (trabajador del café) en tres tareas
+"""
+Interfaz de terminal para crear y procesar pedidos en la cafetería.
+Guía al operador (trabajador del café) en tres tareas
 principales: crear pedidos, finalizar pedidos pendientes y modificar el
-inventario. El diseño prioriza claridad: cada paso queda documentado con
-comentarios para facilitar su comprensión.
+inventario.
 """
 from cafe import GestorCafe, Inventario, Bebida, Alimento, PedidoLocal, PedidoDelivery
-import time
-
 
 def imprimir_productos(inventario: Inventario):
     # Muestra en pantalla los productos actualmente en el inventario
     print("Productos disponibles:")
     for codigo, nombre, precio, stock in inventario.listar_productos():
         print(f"  {codigo}: {nombre} - ${precio:.2f} (stock: {stock})")
-
 
 def interfaz_terminal():
     # Crear inventario y poblar con algunos productos iniciales
@@ -53,9 +49,8 @@ def interfaz_terminal():
                 try:
                     mesa = int(input("Número de mesa (0 para delivery): ").strip())
                 except ValueError:
-                    # Si la entrada no es un entero, asumimos delivery
-                    print("Mesa inválida, se usará 0 (delivery)")
-                    mesa = 0
+                    print("Mesa inválida, pedido cancelado.")
+                    continue
 
                 # Asignar ID correlativo según el tipo de pedido
                 if mesa == 0:
@@ -79,9 +74,8 @@ def interfaz_terminal():
                     try:
                         cantidad = int(input("Cantidad: ").strip())
                     except ValueError:
-                        # Por simplicidad, usar una unidad si el operador no introduce un número
-                        print("Cantidad inválida, usando 1")
-                        cantidad = 1
+                        print("Cantidad inválida, pedido cancelado.")
+                        continue
 
                     # Si la cantidad solicitada excede el stock, solicitar confirmación
                     # Consultar stock usando el código del producto

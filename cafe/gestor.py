@@ -1,11 +1,8 @@
 """Módulo gestor.
 
-Provee una implementación mínima de GestorCafe. Genera IDs correlativos para
-pedidos locales y delivery, y tiene un método procesar_pedido que emula el
-procesamiento (por ahora imprime el resultado).
+Genera IDs correlativos para pedidos locales y delivery, 
+y tiene un método procesar_pedido que simula el procesamiento de un pedido mostrando su total.
 """
-
-
 class GestorCafe:
     def __init__(self, inventario=None, trabajadores=1):
         # referencia al inventario y número de trabajadores (informativo)

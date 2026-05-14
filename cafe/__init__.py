@@ -1,5 +1,4 @@
 """Sistema de gestión de cafetería (módulo principal).
-
 Exponemos los componentes principales en español para facilitar su uso:
 `from cafe import GestorCafe, Inventario, Producto, Alimento, Bebida, Pedido`.
 """
