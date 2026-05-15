@@ -70,7 +70,7 @@ class PedidoLocal(Pedido):
     def total(self):
         # calcular suma de líneas, aplicar 10% de tienda y luego descuento del operador
         suma = 0.0
-        for it in self.__items:
+        for it in self.items():
             suma += it.total_linea()
         sub_after_local = suma * (1 - 10.0 / 100.0)
         return self.aplicar_descuento_operador(sub_after_local)
@@ -93,7 +93,7 @@ class PedidoDelivery(Pedido):
     def total(self):
         # calcular suma de líneas, aplicar 5% de tienda, luego descuento del operador y cargo
         suma = 0.0
-        for it in self.__items:
+        for it in self.items():
             suma += it.total_linea()
         sub_after_delivery = suma * (1 - 5.0 / 100.0)
         return self.aplicar_descuento_operador(sub_after_delivery) + self._cargo_envio

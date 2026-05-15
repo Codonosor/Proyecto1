@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafetería - Pedidos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center" style="background: linear-gradient(120deg,#f8fafc 70%,#e0e7ff 100%);">
+                    <img src="https://cdn-icons-png.flaticon.com/512/415/415733.png" alt="Café" width="100" class="mb-3 mt-2">
+                    <h1 class="mb-2" style="font-family: 'Segoe UI',sans-serif; color:#4b3f2a;">Panel de Cafetería</h1>
+                    <h5 class="mb-4" style="color:#6c757d;">Proyecto del equipo: Victor, Tomas y Francisca</h5>
+                    <div class="mb-3">
+                        <span class="badge bg-primary fs-6 me-2">Victor</span>
+                        <span class="badge bg-info text-dark fs-6 me-2">Tomas</span>
+                        <span class="badge bg-warning text-dark fs-6">Francisca</span>
+                    </div>
+                    <p class="lead">Panel principal para tomar pedidos y controlar inventario durante el turno.</p>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{category}}">{{ message }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+                        <a href="{{ url_for('nuevo_pedido') }}" class="btn btn-primary btn-lg px-4">Nuevo Pedido</a>
+                        <a href="{{ url_for('ver_inventario') }}" class="btn btn-secondary btn-lg px-4">Inventario</a>
+                    </div>
+                    <hr>
+                    <h3 class="mb-3">Pedidos pendientes</h3>
+                    {% if pedidos %}
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light"><tr><th>ID</th><th>Cliente</th><th>Tipo</th><th>Items</th><th>Acciones</th></tr></thead>
+                        <tbody>
+                        {% for p in pedidos %}
+                        <tr>
+                            <td>{{ p.id_pedido }}</td>
+                            <td>{{ p.cliente }}</td>
+                            <td>{% if p.mesa > 0 %}Local (Mesa {{p.mesa}}){% else %}Delivery{% endif %}</td>
+                            <td>
+                                <ul class="mb-0">
+                                {% for it in p.items() %}
+                                  <li>{{ it.producto.mostrar_nombre() }} x {{ it.cantidad }}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('procesar_pedido', idx=loop.index0) }}" class="btn btn-primary btn-sm">Procesar</a>
+                                <a href="{{ url_for('cancelar_pedido', idx=loop.index0) }}" class="btn btn-danger btn-sm">Cancelar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="alert alert-info mt-4">No hay pedidos pendientes.<br>¡Comienza creando tu primer pedido!</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

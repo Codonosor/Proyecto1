@@ -140,11 +140,20 @@ def interfaz_terminal():
                 for idx, ped in enumerate(pedidos_pendientes, start=1):
                     destino = f"MESA {ped.mesa}" if ped.mesa > 0 else "DELIVERY"
                     print(f"{idx}. {ped.cliente} - {destino} - items: {len(ped.items())}")
+                print("0. Procesar TODOS concurrentemente")
                 try:
                     sel = int(input("Selecciona número de pedido para procesar: ").strip())
                 except ValueError:
                     print("Selección inválida")
                     continue
+                if sel == 0:
+                    totales = gestor.procesar_pedidos_concurrentes(list(pedidos_pendientes))
+                    print("Resumen de cobro concurrente:")
+                    for i, total in enumerate(totales, start=1):
+                        print(f"  Pedido {i}: ${total:.2f}")
+                    pedidos_pendientes = ()
+                    continue
+
                 if not (1 <= sel <= len(pedidos_pendientes)):
                     print("Selección fuera de rango")
                     continue
