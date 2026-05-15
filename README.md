@@ -17,13 +17,23 @@ Estructura del proyecto
 - cafe/inventario.py: Inventario (agregar, eliminar, obtener, reservar, liberar, listar)
 - cafe/pedido.py: Pedido, PedidoLocal, PedidoDelivery, ItemPedido (cálculo de totales y descuentos)
 - cafe/gestor.py: GestorCafe (genera IDs correlativos y procesa pedidos)
-- main.py: Interfaz de terminal con menú interactivo
+- main.py: Interfaz de terminal con menú interactivo (se mantiene como entrada principal)
+- webapp.py: Capa web (Flask) que reutiliza las mismas clases del dominio
 
 Uso rápido
 
 1. Ejecuta: `python main.py` en la raíz del proyecto.
 2. El menú interactivo permite crear pedidos, finalizar o cancelar pedidos
    pendientes, y modificar el inventario.
+
+Uso web (opcional)
+
+1. Instala dependencia: `pip3 install flask`
+2. Ejecuta: `python3 webapp.py`
+3. Abre: `http://127.0.0.1:5000/`
+
+Nota: No se reemplazó `main.py`; se mantuvo la estructura original y se agregó
+la interfaz web como capa adicional de presentación.
 
 Concurrencia (threading)
 
