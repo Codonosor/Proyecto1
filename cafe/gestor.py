@@ -1,5 +1,5 @@
-"""Módulo gestor.
-
+"""
+Módulo gestor.
 Genera IDs correlativos para pedidos locales y delivery, 
 y tiene un método procesar_pedido que simula el procesamiento de un pedido mostrando su total.
 """

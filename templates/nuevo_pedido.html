@@ -281,6 +281,19 @@
                 </div>
 
                 <div class="actions">
+                    <div class="me-auto d-flex align-items-center gap-2">
+                        <div>
+                            <label class="form-label mb-1">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="finalizar">Finalizar inmediatamente</option>
+                                <option value="pendiente">Guardar como pendiente</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label mb-1">Descuento operador (%)</label>
+                            <input type="text" name="descuento" class="form-control" placeholder="ej. 25 para 25%">
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-main btn-lg">Crear Pedido</button>
                     <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">Volver</a>
                 </div>
