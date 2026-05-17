@@ -36,32 +36,3 @@ class GestorCafe:
         total = pedido.total()
         with self._lock_print:
             print(f"Procesado pedido {pedido.id_pedido} para {pedido.cliente} ({destino}): total={total:.2f}")
-
-    def procesar_pedidos_concurrentes(self, pedidos):
-        """Procesa varios pedidos al mismo tiempo usando threading.
-
-        No modifica el contrato de procesar_pedido; solo coordina hilos para
-        simular atención concurrente en cocina/caja.
-        """
-        if not pedidos:
-            return []
-
-        max_hilos = max(1, int(self.trabajadores))
-        semaforo = threading.Semaphore(max_hilos)
-        hilos = []
-        resultados = [0.0] * len(pedidos)
-
-        def worker(idx, pedido):
-            with semaforo:
-                self.procesar_pedido(pedido)
-                resultados[idx] = pedido.total()
-
-        for idx, pedido in enumerate(pedidos):
-            hilo = threading.Thread(target=worker, args=(idx, pedido), daemon=False)
-            hilos.append(hilo)
-            hilo.start()
-
-        for hilo in hilos:
-            hilo.join()
-
-        return resultados
