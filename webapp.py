@@ -147,10 +147,15 @@ def procesar_pedido(idx):
 
 @app.route('/cancelar_pedido/<int:idx>')
 def cancelar_pedido(idx):
-    if 0 <= idx < len(pedidos_pendientes):
-        pedido = pedidos_pendientes.pop(idx)
+    pedido = None
+    with pedidos_lock:
+        if 0 <= idx < len(pedidos_pendientes):
+            pedido = pedidos_pendientes.pop(idx)
+    if pedido:
+        # liberar stock de forma protegida
         for it in pedido.items():
-            inventario.liberar(it.producto.mostrar_codigo(), it.cantidad)
+            with inventory_lock:
+                inventario.liberar(it.producto.mostrar_codigo(), it.cantidad)
         flash(f'Pedido {pedido.id_pedido} cancelado y stock liberado.', 'info')
     return redirect(url_for('index'))
 
