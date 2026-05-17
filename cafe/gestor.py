@@ -5,7 +5,6 @@ y tiene un método procesar_pedido que simula el procesamiento de un pedido most
 """
 import threading
 
-
 class GestorCafe:
     def __init__(self, inventario=None, trabajadores=1):
         # referencia al inventario y número de trabajadores (informativo)

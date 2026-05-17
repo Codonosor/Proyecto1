@@ -17,10 +17,10 @@ pedidos_lock = threading.Lock()
 
 # Productos de ejemplo
 if not inventario.listar_productos():
-    inventario.agregar_producto(Bebida("B001", "Café Americano", 2.5, tam_ml=250), cantidad=10)
-    inventario.agregar_producto(Bebida("B002", "Café Latte", 3.5, tam_ml=300), cantidad=5)
-    inventario.agregar_producto(Alimento("A001", "Sandwich", 4.0, calorias=450), cantidad=3)
-    inventario.agregar_producto(Alimento("A002", "Porción de pastel", 2.8, calorias=350), cantidad=4)
+    inventario.agregar_producto(Bebida("B001", "Café Americano", 2.5, tam_ml=250), cantidad=30)
+    inventario.agregar_producto(Bebida("B002", "Café Latte", 3.5, tam_ml=300), cantidad=15)
+    inventario.agregar_producto(Alimento("A001", "Sandwich", 4.0, calorias=450), cantidad=20)
+    inventario.agregar_producto(Alimento("A002", "Porción de pastel", 2.8, calorias=350), cantidad=24)
 
 
 @app.route('/')
